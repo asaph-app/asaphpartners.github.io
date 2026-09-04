@@ -1,3 +1,12 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 type Props = {
   headers: string[];
   rows: React.ReactNode[][];
@@ -5,32 +14,35 @@ type Props = {
 
 export function DocTable({ headers, rows }: Props) {
   return (
-    <div className="overflow-hidden rounded-[14px] border border-line bg-white/70">
-      <table className="w-full border-collapse text-[0.9rem]">
-        <thead>
-          <tr className="bg-white/55">
+    <div className="overflow-hidden rounded-xl bg-card/70 ring-1 ring-foreground/10">
+      <Table>
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
             {headers.map((header) => (
-              <th
+              <TableHead
                 key={header}
-                className="px-3.5 py-2.5 text-left text-[0.72rem] font-semibold uppercase tracking-[0.06em] text-muted"
+                className="px-3.5 text-[0.72rem] font-semibold tracking-[0.06em] text-muted-foreground uppercase"
               >
                 {header}
-              </th>
+              </TableHead>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {rows.map((row, i) => (
-            <tr key={i} className="border-t border-line">
+            <TableRow key={i} className="hover:bg-transparent">
               {row.map((cell, j) => (
-                <td key={j} className="px-3.5 py-2.5 align-top text-ink-soft">
+                <TableCell
+                  key={j}
+                  className="px-3.5 py-2.5 align-top whitespace-normal text-ink-soft"
+                >
                   {cell}
-                </td>
+                </TableCell>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

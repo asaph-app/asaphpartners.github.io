@@ -14,7 +14,7 @@ export function TableOfContents() {
   return (
     <nav
       aria-label="Sumário"
-      className="sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-auto py-1 max-lg:static max-lg:mb-4 max-lg:flex max-lg:max-h-none max-lg:flex-wrap max-lg:gap-x-3 max-lg:gap-y-1 max-lg:border-b max-lg:border-line max-lg:pb-3"
+      className="sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-auto py-1 max-lg:static max-lg:mb-4 max-lg:flex max-lg:max-h-none max-lg:flex-wrap max-lg:gap-x-3 max-lg:gap-y-1 max-lg:border-b max-lg:border-border max-lg:pb-3"
     >
       <div className="mb-5 text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-asaph-deep max-lg:mb-2 max-lg:w-full">
         asaph · Parceiros

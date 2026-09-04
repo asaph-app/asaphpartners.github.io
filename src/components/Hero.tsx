@@ -4,7 +4,7 @@ export function Hero() {
       <div className="mb-3.5 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-asaph-deep">
         Documentação da API
       </div>
-      <h1 className="mb-4 text-[clamp(2.1rem,4vw,3rem)] font-bold leading-[1.12] tracking-tight text-ink">
+      <h1 className="mb-4 text-[clamp(2.1rem,4vw,3rem)] font-semibold leading-[1.12] tracking-tight text-ink">
         Integração asaph para parceiros
       </h1>
       <p className="m-0 max-w-[38rem] text-[1.1rem] leading-relaxed text-ink-soft">

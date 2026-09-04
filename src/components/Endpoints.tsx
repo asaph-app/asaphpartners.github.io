@@ -1,23 +1,26 @@
 import { CodeBlock } from "@/components/CodeBlock";
 import { DocTable } from "@/components/DocTable";
+import { EndpointTry } from "@/components/EndpointTry";
 import { Section } from "@/components/Section";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 type Method = "GET" | "POST" | "DELETE";
 
 function MethodBadge({ method }: { method: Method }) {
-  const styles =
-    method === "GET"
-      ? "bg-[#dceaf5] text-[#1a4d73]"
-      : method === "DELETE"
-        ? "bg-[#f6dede] text-[#7a2e2e]"
-        : "bg-asaph-soft text-asaph-deep";
-
   return (
-    <span
-      className={`rounded-md px-2 py-1 font-mono text-[0.72rem] font-medium tracking-wide ${styles}`}
+    <Badge
+      variant="secondary"
+      className={cn(
+        "rounded-md font-mono text-[0.72rem] tracking-wide",
+        method === "GET" && "bg-[#dceaf5] text-[#1a4d73]",
+        method === "DELETE" && "bg-[#f6dede] text-[#7a2e2e]",
+        method === "POST" && "bg-asaph-soft text-asaph-deep",
+      )}
     >
       {method}
-    </span>
+    </Badge>
   );
 }
 
@@ -33,17 +36,15 @@ function Endpoint({
   children: React.ReactNode;
 }) {
   return (
-    <article
-      id={id}
-      className="scroll-mt-6 border-b border-line pb-1 mb-8 last:mb-0 last:border-0"
-    >
+    <article id={id} className="group/endpoint scroll-mt-6 mb-8 last:mb-0">
       <div className="mb-2.5 flex flex-wrap items-center gap-2.5">
         <MethodBadge method={method} />
         <span className="font-mono text-[0.92rem] font-medium text-ink">
           {path}
         </span>
       </div>
-      <div className="space-y-3 text-ink-soft">{children}</div>
+      <div className="flex flex-col gap-3 text-ink-soft">{children}</div>
+      <Separator className="mt-8 group-last/endpoint:hidden" />
     </article>
   );
 }
@@ -51,17 +52,12 @@ function Endpoint({
 export function Endpoints() {
   return (
     <Section id="endpoints" title="Endpoints">
-      <Endpoint id="test" method="GET" path="/partner/test">
-        <p>
-          Valida apenas o token de identidade (<code>Authorization</code>). Não
-          exige <code>X-Device-Code</code>. Útil para conferir o JWT antes do
-          pareamento — a seção Credenciais usa este endpoint via servidor.
-        </p>
-        <p>
-          <strong className="text-ink">Resposta:</strong> <code>200 OK</code> se
-          o token for válido.
-        </p>
-      </Endpoint>
+      <p className="m-0 text-[0.95rem]">
+        Use os painéis <strong className="text-ink">Try it</strong> com o token
+        e o device code de{" "}
+        <a href="#credenciais">Credenciais</a>. As chamadas passam pelo
+        servidor desta documentação.
+      </p>
 
       <Endpoint id="handshake" method="POST" path="/partner/handshake">
         <p>
@@ -79,6 +75,7 @@ export function Endpoints() {
         <CodeBlock>{`curl -X POST "$BASE_URL/partner/handshake" \\
   -H "Authorization: Bearer $PARTNER_TOKEN" \\
   -H "X-Device-Code: $DEVICE_CODE"`}</CodeBlock>
+        <EndpointTry method="POST" pathTemplate="/partner/handshake" />
       </Endpoint>
 
       <Endpoint id="me" method="GET" path="/partner/me">
@@ -88,6 +85,7 @@ export function Endpoints() {
   "name": "Igreja Exemplo",
   "avatar_url": "https://…"
 }`}</CodeBlock>
+        <EndpointTry method="GET" pathTemplate="/partner/me" />
       </Endpoint>
 
       <Endpoint id="orders" method="GET" path="/partner/orders">
@@ -115,6 +113,24 @@ export function Endpoints() {
     "time": "2026-09-07T18:00:00Z"
   }
 ]`}</CodeBlock>
+        <EndpointTry
+          method="GET"
+          pathTemplate="/partner/orders"
+          fields={[
+            {
+              name: "query",
+              label: "query",
+              kind: "query",
+              placeholder: "Filtro opcional",
+            },
+            {
+              name: "take",
+              label: "take",
+              kind: "query",
+              placeholder: "20",
+            },
+          ]}
+        />
       </Endpoint>
 
       <Endpoint id="order-detail" method="GET" path="/partner/orders/{id}">
@@ -166,6 +182,18 @@ export function Endpoints() {
           <code>song</code>, <code>bible</code>, <code>media</code>,{" "}
           <code>file</code>.
         </p>
+        <EndpointTry
+          method="GET"
+          pathTemplate="/partner/orders/{id}"
+          fields={[
+            {
+              name: "id",
+              label: "id",
+              kind: "path",
+              placeholder: "uuid-da-ordem",
+            },
+          ]}
+        />
       </Endpoint>
 
       <Endpoint
@@ -182,6 +210,24 @@ export function Endpoints() {
   "access_token": "…",
   "url": "https://…"
 }`}</CodeBlock>
+        <EndpointTry
+          method="GET"
+          pathTemplate="/partner/orders/{order_id}/file/{file_id}/download_session"
+          fields={[
+            {
+              name: "order_id",
+              label: "order_id",
+              kind: "path",
+              placeholder: "uuid-da-ordem",
+            },
+            {
+              name: "file_id",
+              label: "file_id",
+              kind: "path",
+              placeholder: "id-externo-storage",
+            },
+          ]}
+        />
       </Endpoint>
 
       <Endpoint id="revoke" method="DELETE" path="/partner/device">
@@ -194,6 +240,16 @@ export function Endpoints() {
           <strong className="text-ink">Resposta:</strong>{" "}
           <code>204 No Content</code>.
         </p>
+        <EndpointTry
+          method="DELETE"
+          pathTemplate="/partner/device"
+          confirm={{
+            title: "Revogar este dispositivo?",
+            description:
+              "O dispositivo passará a revoked. Rotas protegidas falharão até um novo pareamento. Esta ação não pode ser desfeita nesta sessão.",
+            actionLabel: "Revogar",
+          }}
+        />
       </Endpoint>
     </Section>
   );

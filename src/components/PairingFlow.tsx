@@ -1,5 +1,7 @@
 import { CodeBlock } from "@/components/CodeBlock";
 import { Section } from "@/components/Section";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function PairingFlow() {
   return (
@@ -10,7 +12,7 @@ export function PairingFlow() {
         handshake. Depois disso, as rotas listadas abaixo ficam disponíveis.
       </p>
 
-      <ol className="m-0 list-none space-y-3 p-0">
+      <div className="flex flex-col gap-3">
         <Step n={1}>
           <strong className="text-ink">
             Exiba um QR Code (ou uma string Base64)
@@ -103,18 +105,22 @@ Content-Type: application/json
           <code>X-Device-Code</code> para obter os dados da organização
           vinculada.
         </Step>
-      </ol>
+      </div>
     </Section>
   );
 }
 
 function Step({ n, children }: { n: number; children: React.ReactNode }) {
   return (
-    <li className="relative rounded-[14px] border border-line bg-white/70 py-4 pl-[3.35rem] pr-4">
-      <span className="absolute left-4 top-4 grid h-6 w-6 place-items-center rounded-lg bg-asaph text-[0.8rem] font-bold text-white">
-        {n}
-      </span>
-      <div className="text-ink-soft [&_strong]:text-ink">{children}</div>
-    </li>
+    <Card className="bg-card/70 py-4 ring-foreground/10">
+      <CardContent className="flex gap-3">
+        <Badge className="size-6 shrink-0 justify-center rounded-lg px-0 font-bold">
+          {n}
+        </Badge>
+        <div className="min-w-0 text-ink-soft [&_strong]:text-ink">
+          {children}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
