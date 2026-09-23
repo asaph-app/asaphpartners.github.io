@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   const publicApiUrl =
-    process.env.NEXT_PUBLIC_API_URL ?? "https://v2.api.asaph.app.br";
+    process.env.NEXT_PUBLIC_API_URL ?? "https://v2.api.goasaph.com";
 
   return (
     <PartnerCredentialsProvider>
